@@ -6,7 +6,7 @@ library(sangeranalyseR)
 library(seqinr)
 options(repos = BiocManager::repositories())
 
-
+# User interface
 ui = fluidPage(
   useShinyjs(),
   theme = shinytheme("cerulean"),
@@ -38,7 +38,7 @@ ui = fluidPage(
 )#,
 
 
-
+# Edited version of the BrowseSeqs() function from the DECIPHER package
 my_BrowseSeqs= function(myXStringSet,
                         htmlFile=paste(tempdir(),"/myXStringSet.html",sep=""),
                         openURL=interactive(),
@@ -768,7 +768,7 @@ mostConsensusString_2 <- function(seqs){
   return(c(list("contig"=DNAString(paste(new_seq, sep="", collapse=""))),list("consensus_matrix"= conm)))
 }
 
-
+# Server
 server = function(input, output, session) {
   
   all_data=reactive({
@@ -824,7 +824,7 @@ server = function(input, output, session) {
     bad_means=c(means_unused_F,means_unused_R)
     bad_df=cbind(bad_files, bad_means)
     if (is.null(bad_df)==FALSE) {
-    colnames(bad_df)=c("Unused file","Average score")}
+    colnames(bad_df)=c("Unused file","Average Phred score")}
     tc_3=15
     pc=0.33
     if ((sum(good_means)/length(good_means))<26) {tc_3=13
@@ -926,14 +926,6 @@ server = function(input, output, session) {
       if (input$submit>0) {isolate(all_data())}
       all_data()$bad_df
     })
-    
-    
-      
-      
-    
-   
-     
-    
-  
 }
+
 shinyApp(ui, server)
